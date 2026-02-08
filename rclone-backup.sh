@@ -82,8 +82,7 @@ run_backup() {
 		--fast-list \
 		--no-check-dest \
 		--no-traverse \
-		--progress \
-		--stats-one-line \
+		--stats 30s \
 		--log-level INFO \
 		2>&1 | tee -a "$current_log"
 
