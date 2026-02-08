@@ -6,7 +6,7 @@ A bash script that automates backups to Google Drive using rclone, optimized for
 
 - **Incremental backups**: Only uploads files matching `database_*` prefix
 - **Age filtering**: Only uploads files newer than 3 days
-- **Remote cleanup**: Automatically removes files older than 3 days from Google Drive
+- **Remote cleanup**: Permanently deletes files older than 3 days from Google Drive (bypasses trash)
 - **Performance optimized**: Parallel transfers, large chunks for big files
 - **Per-execution logging**: Creates a new log file for each backup run
 - **Cron-friendly**: Designed to run automatically via cron
