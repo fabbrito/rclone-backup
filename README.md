@@ -21,7 +21,7 @@ A bash script that automates backups to Google Drive using rclone, optimized for
 
 1. **Install rclone**:
    ```bash
-   curl https://rclone.org/install.sh | sudo bash
+   sudo -v ; curl https://rclone.org/install.sh | sudo bash
    ```
 
 2. **Configure rclone**:
