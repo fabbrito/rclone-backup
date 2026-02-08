@@ -12,6 +12,7 @@ log_dir='/opt/backup/log'
 
 # Generate timestamp for this backup run
 timestamp=$(date '+%Y-%m-%d_%H-%M-%S')
+log_date=$(date '+%Y-%m-%d')
 backup_dest="${remote_name}:${backup_base}"
 keep_days=3
 file_prefix='database_'
@@ -21,8 +22,8 @@ transfers=8
 checkers=16
 drive_chunk_size='128M'
 
-# Create unique log file for this run
-current_log="${log_dir}/rclone_backup_${timestamp}.log"
+# Log file for this date (appends throughout the day)
+current_log="${log_dir}/rclone_backup_${log_date}.log"
 
 # Logging function - writes to console and current log file
 log() {
