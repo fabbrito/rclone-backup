@@ -70,8 +70,6 @@ run_backup() {
 	# --checkers: number of parallel checks (default 8)
 	# --drive-chunk-size: upload chunk size for Google Drive
 	# --fast-list: faster listing for many files (uses more memory)
-	# --no-check-dest: skip checking destination exists (faster)
-	# --no-traverse: don't traverse destination (faster for copy)
 	log "Starting rclone copy..."
 	rclone copy "$source_dir" "$backup_dest" \
 		--max-age "${keep_days}d" \
@@ -80,8 +78,6 @@ run_backup() {
 		--checkers "$checkers" \
 		--drive-chunk-size "$drive_chunk_size" \
 		--fast-list \
-		--no-check-dest \
-		--no-traverse \
 		--stats 30s \
 		--log-level INFO \
 		2>&1 | tee -a "$current_log"

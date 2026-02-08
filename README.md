@@ -78,8 +78,6 @@ The script includes these optimizations for large files (7GB+):
 - `--checkers 16` - 16 parallel file checkers (default: 8)
 - `--drive-chunk-size 128M` - 128MB upload chunks for Google Drive (default: 8M)
 - `--fast-list` - Faster directory listing (uses more RAM)
-- `--no-check-dest` - Skip destination existence checks
-- `--no-traverse` - Don't scan destination tree
 
 Adjust these in the script if needed:
 ```bash
