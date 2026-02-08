@@ -72,7 +72,8 @@ run_backup() {
 	# --fast-list: faster listing for many files (uses more memory)
 	# --no-check-dest: skip checking destination exists (faster)
 	# --no-traverse: don't traverse destination (faster for copy)
-	if rclone copy "$source_dir" "$backup_dest" \
+	log "Starting rclone copy..."
+	rclone copy "$source_dir" "$backup_dest" \
 		--max-age "${keep_days}d" \
 		--include "${file_prefix}*" \
 		--transfers "$transfers" \
@@ -84,10 +85,9 @@ run_backup() {
 		--progress \
 		--stats-one-line \
 		--log-level INFO \
-		2>&1 | while read -r line; do
-			log "$line"
-		done; then
+		2>&1 | tee -a "$current_log"
 
+	if ((PIPESTATUS[0] == 0)); then
 		end_time=$(date +%s)
 		duration=$((end_time - start_time))
 		log "Backup completed successfully in ${duration}s"
