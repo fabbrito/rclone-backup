@@ -31,6 +31,9 @@ A bash script that automates backups to Google Drive using rclone, optimized for
    - Create a Google Drive remote (e.g., `gdrive`)
    - Follow the authentication flow
 
+   **Important:** For large backups (>7GB), it's highly recommended to create your own Google Drive client ID instead of using the default one. This helps avoid rate limits:
+   [Making your own client ID](https://rclone.org/drive/#making-your-own-client-id)
+
 3. **Edit the script**:
    ```bash
    nano rclone-backup.sh
