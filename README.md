@@ -81,7 +81,7 @@ The script includes these optimizations for large files (7GB+):
 
 Adjust these in the script if needed:
 ```bash
-transfers=8      # Increase for faster internet
+transfers=8      # Parallel uploads (set to 1 for sequential/one-at-a-time)
 checkers=16      # Increase for more CPU cores
 drive_chunk_size='128M'  # Reduce if low on memory
 ```
