@@ -41,6 +41,14 @@ check_rclone() {
 	fi
 }
 
+# Check internet connectivity
+check_connectivity() {
+	if ! ping -c 1 -W 5 8.8.8.8 &>/dev/null; then
+		log 'ERROR: No internet connection'
+		exit 1
+	fi
+}
+
 # Validate remote exists
 validate_remote() {
 	if ! rclone listremotes 2>/dev/null | grep -q "^${remote_name}:"; then
@@ -104,6 +112,7 @@ cleanup_remote() {
 
 # Main
 main() {
+	check_connectivity
 	check_rclone
 	validate_remote
 	validate_source
