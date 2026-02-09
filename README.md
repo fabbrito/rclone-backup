@@ -5,11 +5,13 @@ A bash script that automates backups to Google Drive using rclone, optimized for
 ## Features
 
 - **Incremental backups**: Only uploads files matching `database_*` prefix
-- **Age filtering**: Only uploads files newer than 3 days
-- **Remote cleanup**: Permanently deletes files older than 3 days from Google Drive (bypasses trash)
+- **Age filtering**: Only uploads files newer than specified days (default: 2 days)
+- **Remote cleanup**: Permanently deletes files older than specified days from Google Drive (bypasses trash)
+- **Idempotent behavior**: Running the script multiple times produces the same result for the same time window
 - **Performance optimized**: Parallel transfers, large chunks for big files
-- **Per-execution logging**: Creates a new log file for each backup run
+- **Daily logging**: Appends to a single log file per day
 - **Cron-friendly**: Designed to run automatically via cron
+- **Pre-flight checks**: Verifies internet connectivity before starting
 
 ## Requirements
 
@@ -88,12 +90,12 @@ drive_chunk_size='128M'  # Reduce if low on memory
 
 ## Log Files
 
-Each execution creates a unique log file:
+Each day uses a single log file that appends throughout the day:
 ```
-/opt/backup/log/rclone_backup_2026-02-08_14-30-00.log
+/opt/backup/log/rclone_backup_2026-02-08.log
 ```
 
-Old log files are automatically cleaned up by your existing backup script's `find` command.
+All backup and cleanup operations append to this file. Old log files are automatically cleaned up by your existing backup script's `find` command.
 
 ## Style Guide
 
@@ -114,7 +116,7 @@ MIT License - See bash_style.md for original style guide license.
 **Script not uploading files?**
 - Check `file_prefix` matches your backup files (default: `database_`)
 - Verify `source_dir` path is correct
-- Check file ages with `find /path -mtime -3`
+- Check file ages with `find /path -mtime -2`
 
 **Permission denied?**
 ```bash
@@ -131,4 +133,16 @@ which rclone
 ```bash
 rclone listremotes
 # Should show your configured remote
+```
+
+**Testing rclone commands (dry-run):**
+```bash
+# See what would be deleted (without actually deleting)
+rclone delete gdrive:backups/db --min-age 2d --drive-use-trash=false --dry-run
+
+# See what would be uploaded (without actually uploading)
+rclone copy /opt/backup gdrive:backups/db --max-age 2d --include "database_*" --dry-run
+
+# List files older than 2 days
+rclone ls gdrive:backups/db --min-age 2d
 ```
