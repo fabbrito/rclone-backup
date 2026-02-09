@@ -105,7 +105,7 @@ run_backup() {
 # Cleanup old backups on remote (keep last N days)
 cleanup_remote() {
 	log "Cleaning up backups older than ${keep_days} days on remote..."
-	rclone delete "$backup_dest" --min-age "${keep_days}d" --drive-use-trash=false --log-level INFO 2>/dev/null || {
+	rclone delete "$backup_dest" --min-age "${keep_days}d" --drive-use-trash=false --log-level INFO 2>&1 | tee -a "$current_log" || {
 		log "WARNING: Cleanup completed with some errors"
 	}
 }
