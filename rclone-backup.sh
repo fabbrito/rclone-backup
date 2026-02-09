@@ -14,7 +14,7 @@ log_dir='/opt/backup/log'
 timestamp=$(date '+%Y-%m-%d_%H-%M-%S')
 log_date=$(date '+%Y-%m-%d')
 backup_dest="${remote_name}:${backup_base}"
-keep_days=3
+keep_days=2
 file_prefix='database_'
 
 # Performance settings for large files
@@ -105,14 +105,27 @@ run_backup() {
 # Cleanup old backups on remote (keep last N days)
 cleanup_remote() {
 	log "Cleaning up backups older than ${keep_days} days on remote..."
-	rclone delete "$backup_dest" \
-		--min-age "${keep_days}d" \
-		--drive-use-trash=false \
-		--log-level INFO \
-		2>&1 | tee -a "$current_log"
-
-	if ((PIPESTATUS[0] != 0)); then
-		log "WARNING: Cleanup completed with some errors"
+	log "Finding files older than ${keep_days} days..."
+	
+	# Count files to be deleted
+	local delete_count
+	delete_count=$(rclone ls "$backup_dest" --min-age "${keep_days}d" 2>/dev/null | wc -l)
+	log "Found ${delete_count} file(s) to delete"
+	
+	if ((delete_count > 0)); then
+		rclone delete "$backup_dest" \
+			--min-age "${keep_days}d" \
+			--drive-use-trash=false \
+			-v \
+			2>&1 | tee -a "$current_log"
+		
+		if ((PIPESTATUS[0] != 0)); then
+			log "WARNING: Cleanup completed with some errors"
+		else
+			log "Deleted ${delete_count} file(s) successfully"
+		fi
+	else
+		log "No files to delete"
 	fi
 }
 

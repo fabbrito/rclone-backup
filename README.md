@@ -48,7 +48,7 @@ A bash script that automates backups to Google Drive using rclone, optimized for
    source_dir='/opt/backup'             # Local folder to backup
    log_dir='/opt/backup/log'            # Where to store log files
    file_prefix='database_'              # Only files starting with this
-   keep_days=3                          # Keep last N days
+   keep_days=2                          # Keep last N days
    ```
 
 4. **Make executable**:
